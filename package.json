@@ -1,0 +1,21 @@
+{
+  "name": "fitmycv-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "setup": "chmod +x setup.sh && ./setup.sh",
+    "dev": "docker-compose up",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && uvicorn app.main:app --reload",
+    "build:frontend": "cd frontend && npm run build",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "db:migrate": "docker-compose exec backend alembic upgrade head",
+    "db:rollback": "docker-compose exec backend alembic downgrade -1"
+  }
+}

@@ -1,0 +1,30 @@
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, JSON
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from app.core.database import Base
+
+class Adaptation(Base):
+    __tablename__ = "adaptations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    resume_id = Column(Integer, ForeignKey("resumes.id"), nullable=False)
+    
+    job_title = Column(String, nullable=False)
+    job_url = Column(String, nullable=True)
+    job_description = Column(Text, nullable=False)
+    
+    # AI-generated content
+    optimized_content = Column(JSON, nullable=True)  # Structured CV data
+    match_score = Column(Integer, nullable=True)  # 0-100
+    keywords_added = Column(JSON, nullable=True)  # List of keywords
+    
+    # Output files
+    adapted_file_path = Column(String, nullable=True)
+    pdf_file_path = Column(String, nullable=True)
+    
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Relationships
+    user = relationship("User", back_populates="adaptations")
+    resume = relationship("Resume", back_populates="adaptations")
