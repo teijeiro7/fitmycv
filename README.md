@@ -5,6 +5,7 @@ Plataforma web para adaptar currículums automáticamente a ofertas de trabajo u
 ## Stack Tecnológico
 
 ### Frontend
+
 - React 18 + TypeScript
 - Vite
 - React Router v6
@@ -13,6 +14,7 @@ Plataforma web para adaptar currículums automáticamente a ofertas de trabajo u
 - Axios
 
 ### Backend
+
 - FastAPI (Python 3.11+)
 - SQLAlchemy + Alembic
 - PostgreSQL
@@ -60,6 +62,7 @@ docker-compose up
 ### Sin Docker
 
 #### Backend
+
 ```bash
 cd backend
 python -m venv venv
@@ -69,6 +72,7 @@ uvicorn app.main:app --reload
 ```
 
 #### Frontend
+
 ```bash
 cd frontend
 npm install
