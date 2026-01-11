@@ -17,5 +17,8 @@
     "docker:logs": "docker-compose logs -f",
     "db:migrate": "docker-compose exec backend alembic upgrade head",
     "db:rollback": "docker-compose exec backend alembic downgrade -1"
+  },
+  "dependencies": {
+    "sqlalchemy": "^10.1.1"
   }
 }

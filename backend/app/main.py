@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.core.config import settings
-from app.api.routes import auth, upload, scrape, optimize, users
+from app.api.routes import auth, upload, scrape, optimize, users, github
 
 app = FastAPI(
     title="FitMyCV API",
@@ -25,6 +25,7 @@ app.include_router(upload.router, prefix="/api/upload", tags=["Upload"])
 app.include_router(scrape.router, prefix="/api/scrape", tags=["Scraping"])
 app.include_router(optimize.router, prefix="/api/optimize", tags=["Optimization"])
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
+app.include_router(github.router, prefix="/api", tags=["GitHub"])
 
 @app.get("/")
 async def root():

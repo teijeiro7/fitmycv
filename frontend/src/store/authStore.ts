@@ -14,7 +14,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isAuthenticated: false,
@@ -30,6 +30,10 @@ export const useAuthStore = create<AuthState>()(
       },
 
       fetchUser: async () => {
+        const state = get()
+        // Solo fetch si hay token y no hay usuario
+        if (!state.token || state.user) return
+        
         try {
           const user = await authService.getCurrentUser()
           set({ user, isAuthenticated: true })
@@ -40,7 +44,17 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ token: state.token }),
+      partialize: (state) => ({ 
+        token: state.token, 
+        user: state.user,
+        isAuthenticated: state.isAuthenticated 
+      }),
+      onRehydrateStorage: () => (state) => {
+        // Verificar que el token existe y actualizar isAuthenticated
+        if (state && state.token && state.user) {
+          state.isAuthenticated = true
+        }
+      },
     }
   )
 )

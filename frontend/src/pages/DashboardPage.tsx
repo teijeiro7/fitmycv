@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
-import { useThemeStore } from '@/store/themeStore'
 import { resumeService } from '@/services/resumeService'
 import type { Adaptation } from '@/types'
 import toast from 'react-hot-toast'
+import Header from '@/components/Header'
+import BottomNav from '@/components/BottomNav'
 
 export default function DashboardPage() {
-  const { user, clearAuth } = useAuthStore()
-  const { toggleTheme, isDark } = useThemeStore()
+  const { user } = useAuthStore()
   const navigate = useNavigate()
   const [adaptations, setAdaptations] = useState<Adaptation[]>([])
   const [loading, setLoading] = useState(true)
@@ -27,12 +27,6 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleLogout = () => {
-    clearAuth()
-    navigate('/login')
-    toast.success('Sesión cerrada')
   }
 
   const getStatusBadge = (adaptation: Adaptation) => {
@@ -72,45 +66,12 @@ export default function DashboardPage() {
   const percentage = (usedCredits / totalCredits) * 100
 
   return (
-    <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen pb-24 relative overflow-x-hidden">
+    <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen w-full">
       {/* Top Header */}
-      <header className="sticky top-0 z-30 flex items-center justify-between bg-background-light/90 dark:bg-background-dark/90 px-4 py-3 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="bg-primary/20 dark:bg-primary/30 rounded-full size-10 border-2 border-white dark:border-slate-700 shadow-sm flex items-center justify-center">
-              <span className="text-primary font-bold text-lg">
-                {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
-              </span>
-            </div>
-            <div className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-800"></div>
-          </div>
-          <div>
-            <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">
-              Hola, {user?.full_name?.split(' ')[0] || 'Usuario'}
-            </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">Free Plan</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={toggleTheme}
-            className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
-          >
-            <span className="material-symbols-outlined">
-              {isDark ? 'light_mode' : 'dark_mode'}
-            </span>
-          </button>
-          <button className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors relative">
-            <span className="material-symbols-outlined">notifications</span>
-            {adaptations.length > 0 && (
-              <span className="absolute top-2 right-2 size-2 bg-red-500 rounded-full"></span>
-            )}
-          </button>
-        </div>
-      </header>
+      <Header notificationCount={adaptations.length} />
 
       {/* Main Content Area */}
-      <main className="flex flex-col gap-6 p-4">
+      <main className="w-full flex flex-col gap-6 p-4 pb-24">
         {/* Stats Section */}
         <section>
           <div className="flex flex-col gap-3 rounded-2xl bg-white dark:bg-slate-800 p-5 shadow-sm border border-slate-100 dark:border-slate-700">
@@ -216,62 +177,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50">
-        <div className="flex justify-around items-center h-16 px-2">
-          <button 
-            onClick={() => setActiveTab('home')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-              activeTab === 'home' 
-                ? 'text-primary' 
-                : 'text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary'
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[24px] ${activeTab === 'home' ? 'filled' : ''}`}>
-              home
-            </span>
-            <span className="text-[10px] font-medium">Home</span>
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('resumes')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-              activeTab === 'resumes' 
-                ? 'text-primary' 
-                : 'text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[24px]">description</span>
-            <span className="text-[10px] font-medium">Resumes</span>
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('search')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-              activeTab === 'search' 
-                ? 'text-primary' 
-                : 'text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[24px]">work</span>
-            <span className="text-[10px] font-medium">Job Search</span>
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('menu')}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-              activeTab === 'menu' 
-                ? 'text-primary' 
-                : 'text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary'
-            }`}
-          >
-            <span className="material-symbols-outlined text-[24px]">grid_view</span>
-            <span className="text-[10px] font-medium">Menu</span>
-          </button>
-        </div>
-        
-        {/* Safe Area for iOS Home Indicator */}
-        <div className="h-1 bg-transparent"></div>
-      </nav>
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   )
 }

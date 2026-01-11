@@ -25,168 +25,149 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen">
-      <div className="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
-        {/* Top Navigation */}
-        <div className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
-          <Link to="/" className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
-            <span className="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
-          </Link>
-          <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-            <img src="/images/logopequeno.png" alt="FitMyCV Logo" className="w-6 h-6" />
-            <h2 className="text-base font-semibold tracking-tight">FitMyCV</h2>
-          </div>
+    <div className="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-4 py-12">
+      <div className="w-full max-w-[420px] bg-white dark:bg-[#1a232e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 overflow-hidden">
+        {/* Header */}
+        <div className="pt-8 pb-2 px-6 flex flex-col items-center text-center">
+          <img src="/images/logopequeno.png" alt="FitMyCV Logo" className="w-16 h-16 mb-5" />
+          <h2 className="text-[#0d131b] dark:text-white tracking-tight text-[26px] font-bold leading-tight pb-2">
+            Crea tu cuenta
+          </h2>
+          <p className="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal px-4">
+            Mejora tu CV con Inteligencia Artificial
+          </p>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 flex flex-col pb-8">
-          {/* Hero */}
-          <div className="px-6 pt-6 pb-2">
-            <h1 className="text-3xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white mb-2">
-              Mejora tu CV
-              <br />
-              <span className="text-primary">con Inteligencia Artificial</span>
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
-              Únete a miles de profesionales que han conseguido el trabajo de sus sueños.
-            </p>
-
-            {/* Benefits */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl flex flex-col items-start gap-3 border border-slate-100 dark:border-slate-700">
-                <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined">auto_fix_high</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-sm">Adapta en segundos</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Personalización instantánea</p>
-                </div>
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl flex flex-col items-start gap-3 border border-slate-100 dark:border-slate-700">
-                <div className="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
-                  <span className="material-symbols-outlined">filter_alt</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-sm">Supera filtros ATS</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Optimización de palabras clave</p>
-                </div>
-              </div>
-            </div>
+        {/* Form Content */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {/* Full Name Field */}
+          <div className="flex flex-col gap-1">
+            <label className="text-[#0d131b] dark:text-slate-200 text-sm font-medium leading-normal pb-1">
+              Nombre Completo
+            </label>
+            <input
+              className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-[#0d131b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-[#cfd9e7] dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary h-12 placeholder:text-[#4c6c9a] p-[15px] text-base font-normal leading-normal transition-all"
+              placeholder="Ej. Juan Pérez"
+              type="text"
+              value={formData.fullName}
+              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+              required
+            />
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="px-6 flex flex-col gap-5">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Nombre Completo</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
-                  <span className="material-symbols-outlined text-[20px]">person</span>
-                </div>
-                <input
-                  className="block w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-10 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary focus:ring-primary transition-all shadow-sm"
-                  placeholder="Ej. Juan Pérez"
-                  required
-                  type="text"
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Correo Electrónico</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
-                  <span className="material-symbols-outlined text-[20px]">mail</span>
-                </div>
-                <input
-                  className="block w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-10 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary focus:ring-primary transition-all shadow-sm"
-                  placeholder="nombre@ejemplo.com"
-                  required
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Contraseña</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
-                  <span className="material-symbols-outlined text-[20px]">lock</span>
-                </div>
-                <input
-                  className="block w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-10 pr-10 py-3.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:border-primary focus:ring-primary transition-all shadow-sm"
-                  placeholder="••••••••"
-                  required
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
-                <button
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    {showPassword ? 'visibility_off' : 'visibility'}
-                  </span>
-                </button>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 px-1">Mínimo 8 caracteres</p>
-            </div>
-
-            <div className="flex items-start gap-2 mt-2">
-              <input className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary bg-slate-50 dark:bg-slate-800 dark:border-slate-600" type="checkbox" required />
-              <label className="text-xs text-slate-500 dark:text-slate-400 leading-normal">
-                Acepto los <a className="text-primary hover:underline" href="#">Términos de Servicio</a> y la <a className="text-primary hover:underline" href="#">Política de Privacidad</a>.
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-2 w-full bg-primary hover:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              <span>{loading ? 'Creando cuenta...' : 'Crear Cuenta'}</span>
-              <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="relative my-8 px-6">
-            <div className="absolute inset-0 flex items-center px-6">
-              <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-background-light dark:bg-background-dark px-2 text-xs text-slate-400 font-medium">O continúa con</span>
-            </div>
+          {/* Email Field */}
+          <div className="flex flex-col gap-1">
+            <label className="text-[#0d131b] dark:text-slate-200 text-sm font-medium leading-normal pb-1">
+              Correo Electrónico
+            </label>
+            <input
+              className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-[#0d131b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-[#cfd9e7] dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary h-12 placeholder:text-[#4c6c9a] p-[15px] text-base font-normal leading-normal transition-all"
+              placeholder="nombre@ejemplo.com"
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
           </div>
 
-          {/* Social Login */}
-          <div className="px-6 flex gap-3">
+          {/* Password Field */}
+          <div className="flex flex-col gap-1">
+            <label className="text-[#0d131b] dark:text-slate-200 text-sm font-medium leading-normal pb-1">
+              Contraseña
+            </label>
+            <div className="flex w-full items-stretch rounded-lg relative">
+              <input
+                className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-[#0d131b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/20 border border-[#cfd9e7] dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-primary h-12 placeholder:text-[#4c6c9a] p-[15px] pr-12 text-base font-normal leading-normal transition-all"
+                placeholder="••••••••"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
+              />
+              <button
+                className="absolute right-0 top-0 h-full px-3 text-[#4c6c9a] hover:text-primary dark:text-slate-400 flex items-center justify-center rounded-r-lg transition-colors"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <span className="material-symbols-outlined text-[22px]">
+                  {showPassword ? 'visibility_off' : 'visibility'}
+                </span>
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Mínimo 8 caracteres</p>
+          </div>
+
+          {/* Terms Checkbox */}
+          <div className="flex items-start gap-2 pt-1">
+            <input
+              className="w-4 h-4 mt-0.5 rounded border-[#cfd9e7] dark:border-slate-600 text-primary focus:ring-primary/20 cursor-pointer"
+              type="checkbox"
+              required
+            />
+            <label className="text-slate-600 dark:text-slate-400 text-xs leading-normal">
+              Acepto los{' '}
+              <a className="text-primary hover:underline" href="#">
+                Términos de Servicio
+              </a>{' '}
+              y la{' '}
+              <a className="text-primary hover:underline" href="#">
+                Política de Privacidad
+              </a>
+              .
+            </label>
+          </div>
+
+          {/* Primary Action */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 bg-primary hover:bg-[#0f5bbb] text-white rounded-lg text-base font-semibold shadow-md shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center disabled:opacity-50"
+          >
+            {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+          </button>
+
+          {/* Social Divider */}
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+            <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+              O continúa con
+            </span>
+            <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+          </div>
+
+          {/* Social Buttons */}
+          <div className="grid grid-cols-3 gap-3">
             <button
               type="button"
               onClick={() => authService.loginWithGoogle()}
-              className="flex-1 flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 py-3 rounded-xl transition-colors"
+              className="flex items-center justify-center gap-2 h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group"
             >
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Google</span>
+              <span className="text-slate-700 dark:text-white text-sm font-medium">Google</span>
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 py-3 rounded-xl transition-colors">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Apple</span>
+            <button
+              type="button"
+              onClick={() => authService.loginWithGithub()}
+              className="flex items-center justify-center gap-2 h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group"
+            >
+              <span className="text-slate-700 dark:text-white text-sm font-medium">GitHub</span>
+            </button>
+            <button
+              type="button"
+              className="flex items-center justify-center gap-2 h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group"
+            >
+              <span className="text-slate-700 dark:text-white text-sm font-medium">Apple</span>
             </button>
           </div>
+        </form>
 
-          {/* Footer */}
-          <div className="mt-8 text-center pb-6">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              ¿Ya tienes una cuenta?{' '}
-              <Link className="text-primary font-semibold hover:underline" to="/login">
-                Inicia Sesión
-              </Link>
-            </p>
-          </div>
+        {/* Footer */}
+        <div className="bg-slate-50 dark:bg-slate-900/40 py-4 px-6 text-center border-t border-slate-100 dark:border-slate-800/60">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            ¿Ya tienes una cuenta?{' '}
+            <Link className="text-primary font-semibold hover:underline" to="/login">
+              Inicia Sesión
+            </Link>
+          </p>
         </div>
       </div>
     </div>

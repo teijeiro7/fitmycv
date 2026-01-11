@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str = ""
     GOOGLE_REDIRECT_URI: str = "http://localhost:8000/api/auth/google/callback"
     
+    GITHUB_CLIENT_ID: str = ""
+    GITHUB_CLIENT_SECRET: str = ""
+    GITHUB_REDIRECT_URI: str = "http://localhost:8000/api/auth/github/callback"
+    
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"
     CORS_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:3000"]

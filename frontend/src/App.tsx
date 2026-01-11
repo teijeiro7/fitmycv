@@ -9,9 +9,10 @@ import UploadPage from './pages/UploadPage'
 import PreviewPage from './pages/PreviewPage'
 import DashboardPage from './pages/DashboardPage'
 import AuthCallbackPage from './pages/AuthCallbackPage'
+import SettingsPage from './pages/SettingsPage'
 
 function App() {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, token, user, fetchUser } = useAuthStore()
   const { isDark } = useThemeStore()
 
   // Apply theme on mount and whenever it changes
@@ -23,12 +24,32 @@ function App() {
     }
   }, [isDark])
 
+  // Initialize authentication on app load - only once
+  useEffect(() => {
+    const initAuth = async () => {
+      if (token && !user) {
+        await fetchUser()
+      }
+    }
+    initAuth()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route 
+          path="/" 
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />} 
+        />
+        <Route 
+          path="/login" 
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />} 
+        />
+        <Route 
+          path="/register" 
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />} 
+        />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
         
         {/* Protected Routes */}
@@ -43,6 +64,10 @@ function App() {
         <Route
           path="/preview/:adaptationId"
           element={isAuthenticated ? <PreviewPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/settings"
+          element={isAuthenticated ? <SettingsPage /> : <Navigate to="/login" />}
         />
       </Routes>
     </div>

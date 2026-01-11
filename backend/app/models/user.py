@@ -14,8 +14,10 @@ class User(Base):
     is_verified = Column(Boolean, default=False)
     
     # OAuth fields
-    oauth_provider = Column(String, nullable=True)  # 'google', 'linkedin', etc.
+    oauth_provider = Column(String, nullable=True)  # 'google', 'github', etc.
     oauth_id = Column(String, nullable=True)
+    github_access_token = Column(String, nullable=True)
+    github_username = Column(String, nullable=True)
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -23,3 +25,4 @@ class User(Base):
     # Relationships
     resumes = relationship("Resume", back_populates="user", cascade="all, delete-orphan")
     adaptations = relationship("Adaptation", back_populates="user", cascade="all, delete-orphan")
+    github_repos = relationship("GithubRepo", back_populates="user", cascade="all, delete-orphan")

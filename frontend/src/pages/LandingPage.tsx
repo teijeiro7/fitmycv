@@ -15,11 +15,11 @@ export default function LandingPage() {
           </h2>
         </div>
         <div className="flex items-center gap-4">
-          <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+          {/* <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
             <span className="material-symbols-outlined text-slate-600 dark:text-slate-300">
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
-          </button>
+          </button> */}
           <Link
             to="/login"
             className="hidden sm:block text-slate-600 dark:text-slate-300 font-medium text-sm hover:text-primary transition-colors"
@@ -205,9 +205,9 @@ export default function LandingPage() {
       <footer className="bg-background-light dark:bg-background-dark py-8 border-t border-slate-200 dark:border-slate-800">
         <div className="px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-slate-400">description</span>
+            {/* <span className="material-symbols-outlined text-slate-400">description</span> */}
             <span className="text-slate-700 dark:text-slate-300 font-bold text-sm">
-              Adaptación CV IA
+              FitMyCV
             </span>
           </div>
           <div className="flex gap-6 text-sm text-slate-500 dark:text-slate-400">
@@ -221,7 +221,7 @@ export default function LandingPage() {
               Login
             </Link>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">© 2026 Adaptación CV IA.</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">© 2026 FitMyCV.</p>
         </div>
       </footer>
     </div>
