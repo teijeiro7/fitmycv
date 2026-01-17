@@ -81,7 +81,24 @@ npm run dev
 
 ## Variables de Entorno
 
-Crear `.env` en la raíz del proyecto:
+### 🚀 Configuración Rápida con IA GRATIS
+
+```bash
+# 1. Copia el archivo de ejemplo
+cp backend/.env.example backend/.env
+
+# 2. Obtén tu API key GRATUITA de OpenRouter
+# Ve a: https://openrouter.ai/keys
+
+# 3. Configura en backend/.env:
+AI_PROVIDER=openrouter
+OPENROUTER_API_KEY=sk-or-v1-tu-key-aqui
+OPENROUTER_MODEL=google/gemini-2.0-flash-exp:free
+```
+
+### 📋 Configuración Completa
+
+Crear `.env` en la raíz del proyecto y `backend/.env`:
 
 ```env
 # Database
@@ -102,9 +119,21 @@ GITHUB_CLIENT_ID=your-github-client-id
 GITHUB_CLIENT_SECRET=your-github-client-secret
 GITHUB_REDIRECT_URI=http://localhost:8000/api/github/callback
 
-# AI Provider (TBD)
-AI_API_KEY=your-ai-api-key
+# AI Provider - OpenRouter (GRATIS! 🎉)
+AI_PROVIDER=openrouter
+OPENROUTER_API_KEY=your-openrouter-api-key
+OPENROUTER_MODEL=google/gemini-2.0-flash-exp:free
+OPENROUTER_SITE_URL=http://localhost:5173
+OPENROUTER_APP_NAME=FitMyCV
 ```
+
+**📚 Ver documentación completa:** [docs/AI_CONFIGURATION.md](docs/AI_CONFIGURATION.md)
+
+**Opciones de IA disponibles:**
+
+- 🟢 **OpenRouter** (GRATIS - Recomendado para empezar)
+- 🟡 OpenAI (GPT-4, requiere pago)
+- 🟡 Anthropic Claude (Requiere pago)
 
 ## Características
 
@@ -113,7 +142,9 @@ AI_API_KEY=your-ai-api-key
 - ✅ Análisis automático de tecnologías en repositorios
 - ✅ Upload de CV en formato .docx
 - ✅ Scraping de ofertas de trabajo con Playwright
-- ✅ Adaptación inteligente usando IA
+- ✅ **🤖 Adaptación inteligente usando IA (OpenRouter/OpenAI/Claude)**
+- ✅ **🎯 Sistema de prompts experto para CVs profesionales**
+- ✅ **🆓 Soporte para modelos de IA GRATUITOS**
 - ✅ Editor manual del CV adaptado
 - ✅ Descarga en PDF y DOCX
 - ✅ Dark Mode

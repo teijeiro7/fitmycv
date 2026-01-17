@@ -22,12 +22,41 @@ export interface SyncReposResponse {
   count: number
 }
 
+export interface GithubStatus {
+  connected: boolean
+  username: string | null
+}
+
+export interface LinkGithubResponse {
+  message: string
+  username: string
+}
+
 export const githubService = {
   /**
    * Initiate GitHub OAuth connection
    */
-  async connect(): Promise<{ auth_url: string }> {
-    const response = await api.get<{ auth_url: string }>('/api/github/connect')
+  async connect(): Promise<{ auth_url: string; state: string }> {
+    const response = await api.get<{ auth_url: string; state: string }>('/api/github/connect')
+    return response.data
+  },
+
+  /**
+   * Get GitHub connection status
+   */
+  async getStatus(): Promise<GithubStatus> {
+    const response = await api.get<GithubStatus>('/api/github/status')
+    return response.data
+  },
+
+  /**
+   * Link GitHub account after OAuth callback
+   */
+  async link(accessToken: string, githubUsername: string): Promise<LinkGithubResponse> {
+    const response = await api.post<LinkGithubResponse>('/api/github/link', {
+      access_token: accessToken,
+      github_username: githubUsername
+    })
     return response.data
   },
 

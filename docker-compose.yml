@@ -23,12 +23,23 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: fitmycv-backend
+    env_file:
+      - ./backend/.env
     environment:
       DATABASE_URL: postgresql://fitmycv:fitmycv123@postgres:5432/fitmycv
       SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       FRONTEND_URL: http://localhost:5173
+      # AI Configuration
+      AI_PROVIDER: ${AI_PROVIDER:-openrouter}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-google/gemini-2.0-flash-exp:free}
+      OPENROUTER_SITE_URL: ${OPENROUTER_SITE_URL:-http://localhost:5173}
+      OPENROUTER_APP_NAME: ${OPENROUTER_APP_NAME:-FitMyCV}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
     ports:
       - "8000:8000"
     volumes:

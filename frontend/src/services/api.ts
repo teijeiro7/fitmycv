@@ -2,6 +2,9 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+// Flag to prevent multiple 401 redirects
+let isRedirecting = false
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -27,8 +30,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    console.error('API Error:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      data: error.response?.data
+    })
+
+    if (error.response?.status === 401 && !isRedirecting) {
+      isRedirecting = true
+      console.warn('Unauthorized - clearing auth state')
+      // Clear both token and Zustand persist storage
       localStorage.removeItem('token')
+      localStorage.removeItem('auth-storage')
+      // Redirect to login
       window.location.href = '/login'
     }
     return Promise.reject(error)

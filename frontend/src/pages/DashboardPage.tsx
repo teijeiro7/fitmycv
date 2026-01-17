@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/authStore'
 import { resumeService } from '@/services/resumeService'
 import type { Adaptation } from '@/types'
 import toast from 'react-hot-toast'
-import Header from '@/components/Header'
+import Header from '@/components/LoginHeader'
 import BottomNav from '@/components/BottomNav'
 
 export default function DashboardPage() {

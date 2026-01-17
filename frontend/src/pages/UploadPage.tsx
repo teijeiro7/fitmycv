@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 import toast from 'react-hot-toast'
 import { resumeService } from '@/services/resumeService'
-import Header from '@/components/Header'
+import Header from '@/components/LoginHeader'
 
 export default function UploadPage() {
   const navigate = useNavigate()
@@ -15,11 +15,24 @@ export default function UploadPage() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'] },
     maxFiles: 1,
-    maxSize: 5242880, // 5MB
-    onDrop: (acceptedFiles: File[]) => {
+    maxSize: 10485760, // 10MB
+    onDrop: (acceptedFiles: File[], rejectedFiles: any[]) => {
+      if (rejectedFiles.length > 0) {
+        const error = rejectedFiles[0].errors[0]
+        if (error.code === 'file-too-large') {
+          toast.error('El archivo es demasiado grande. Máximo 10MB')
+        } else if (error.code === 'file-invalid-type') {
+          toast.error('Formato no válido. Solo se aceptan archivos .docx')
+        } else {
+          toast.error('Error al cargar el archivo')
+        }
+        return
+      }
+      
       if (acceptedFiles[0]) {
         setFile(acceptedFiles[0])
-        toast.success('Archivo cargado')
+        toast.success(`✅ ${acceptedFiles[0].name} cargado correctamente`)
+        console.log('Archivo seleccionado:', acceptedFiles[0])
       }
     },
   } as any)
@@ -159,41 +172,61 @@ export default function UploadPage() {
             <input {...(getInputProps() as any)} />
             <div
               className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl transition-all ${
-                isDragActive || file
-                  ? 'border-primary bg-blue-50 dark:bg-blue-900/20 scale-[1.01]'
+                isDragActive
+                  ? 'border-primary bg-blue-50 dark:bg-blue-900/20 scale-[1.02]'
+                  : file
+                  ? 'border-green-400 bg-green-50 dark:bg-green-900/20'
                   : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800/50 hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               {file ? (
-                <>
-                  <div className="w-12 h-12 mb-3 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
-                    <span className="material-symbols-outlined text-2xl">check_circle</span>
+                <div className="space-y-3 text-center px-4">
+                  <div className="w-14 h-14 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 animate-pulse">
+                    <span className="material-symbols-outlined text-3xl">check_circle</span>
                   </div>
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{file.name}</p>
-                  <p className="text-xs text-slate-400 mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                </>
+                  <div>
+                    <p className="text-base font-bold text-slate-900 dark:text-white">{file.name}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB • {file.type || 'DOCX'}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center gap-1 text-green-600 dark:text-green-400">
+                    <span className="material-symbols-outlined text-sm">verified</span>
+                    <span className="text-xs font-semibold">Archivo listo para procesar</span>
+                  </div>
+                </div>
               ) : (
                 <>
                   <div className="w-12 h-12 mb-3 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-200">
                     <span className="material-symbols-outlined text-2xl">upload_file</span>
                   </div>
                   <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                    {isDragActive ? 'Suelta el archivo aquí' : 'Clic para seleccionar archivo'}
+                    {isDragActive ? '✨ Suelta el archivo aquí' : '📄 Clic para seleccionar tu CV'}
                   </p>
-                  <p className="text-xs text-slate-400 mt-1">Soporta .docx hasta 5MB</p>
+                  <p className="text-xs text-slate-400 mt-1">Formato .docx • Hasta 10MB</p>
                 </>
               )}
             </div>
           </div>
 
           {file && (
-            <button
-              onClick={() => setFile(null)}
-              className="mt-2 text-sm text-red-500 hover:text-red-600 flex items-center gap-1"
-            >
-              <span className="material-symbols-outlined text-sm">close</span>
-              Remover archivo
-            </button>
+            <div className="mt-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                <span className="material-symbols-outlined text-sm">task_alt</span>
+                <span className="text-sm font-medium">Archivo seleccionado</span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setFile(null)
+                  toast.success('Archivo removido')
+                }}
+                className="text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              >
+                <span className="material-symbols-outlined text-sm">delete</span>
+                Remover
+              </button>
+            </div>
           )}
         </section>
 

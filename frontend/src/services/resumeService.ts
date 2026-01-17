@@ -32,7 +32,7 @@ export const resumeService = {
     jobDescription: string,
     jobUrl?: string
   ): Promise<AdaptationDetail> {
-    const response = await api.post<AdaptationDetail>('/api/optimize', {
+    const response = await api.post<AdaptationDetail>('/api/optimize/adapt', {
       resume_id: resumeId,
       job_title: jobTitle,
       job_description: jobDescription,

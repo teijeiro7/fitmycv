@@ -1,39 +1,12 @@
 import { Link } from 'react-router-dom'
-import { useThemeStore } from '@/store/themeStore'
+import LandingHeader from '@/components/LandingHeader'
+import LandingFooter from '@/components/LandingFooter'
 
 export default function LandingPage() {
-  const { isDark, toggleTheme } = useThemeStore()
-
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 border-b border-slate-200 dark:border-slate-800 justify-between">
-        <div className="flex items-center gap-3">
-          <img src="/images/logopequeno.png" alt="FitMyCV Logo" className="w-8 h-8" />
-          <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">
-            FitMyCV
-          </h2>
-        </div>
-        <div className="flex items-center gap-4">
-          {/* <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-            <span className="material-symbols-outlined text-slate-600 dark:text-slate-300">
-              {isDark ? 'light_mode' : 'dark_mode'}
-            </span>
-          </button> */}
-          <Link
-            to="/login"
-            className="hidden sm:block text-slate-600 dark:text-slate-300 font-medium text-sm hover:text-primary transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="hidden sm:flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors"
-          >
-            Registrarse
-          </Link>
-        </div>
-      </header>
+      <LandingHeader />
 
       {/* Hero Section */}
       <section className="relative w-full">
@@ -202,28 +175,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-background-light dark:bg-background-dark py-8 border-t border-slate-200 dark:border-slate-800">
-        <div className="px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-          <div className="flex items-center gap-2">
-            {/* <span className="material-symbols-outlined text-slate-400">description</span> */}
-            <span className="text-slate-700 dark:text-slate-300 font-bold text-sm">
-              FitMyCV
-            </span>
-          </div>
-          <div className="flex gap-6 text-sm text-slate-500 dark:text-slate-400">
-            <a className="hover:text-primary transition-colors" href="#">
-              Características
-            </a>
-            <a className="hover:text-primary transition-colors" href="#">
-              Precios
-            </a>
-            <Link className="hover:text-primary transition-colors" to="/login">
-              Login
-            </Link>
-          </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">© 2026 FitMyCV.</p>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   )
 }

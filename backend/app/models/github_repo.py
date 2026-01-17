@@ -14,12 +14,14 @@ class GithubRepo(Base):
     description = Column(Text, nullable=True)
     url = Column(String, nullable=False)
     language = Column(String, nullable=True)  # Primary language
-    languages = Column(JSON, nullable=True)  # All languages with percentages
+    languages = Column(JSON, nullable=True)  # All languages with bytes/percentages
     topics = Column(JSON, nullable=True)  # Repository topics/tags
     stars = Column(Integer, default=0)
+    forks = Column(Integer, default=0)
+    is_private = Column(Boolean, default=False)
     is_selected = Column(Boolean, default=True)  # User wants to include in CV
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+
     # Relationships
     user = relationship("User", back_populates="github_repos")

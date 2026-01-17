@@ -39,7 +39,7 @@ export const authService = {
 
   async loginWithGithub(): Promise<void> {
     try {
-      const response = await api.get<{ auth_url: string }>('/api/github/connect')
+      const response = await api.get<{ auth_url: string; state: string }>('/api/auth/github')
       window.location.href = response.data.auth_url
     } catch (error) {
       console.error('Error getting GitHub auth URL:', error)
