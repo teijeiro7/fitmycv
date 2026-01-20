@@ -4,8 +4,9 @@ Document generation service for creating optimized CVs in DOCX and PDF formats.
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from docx import Document
-from docx.shared import Pt, Inches, RGBColor
+from docx.shared import Pt, Inches, RGBColor, Mm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_ORIENT
 import subprocess
 import tempfile
 import os
@@ -36,11 +37,32 @@ class DocumentGenerator:
         """
         doc = Document()
 
+        # Configure page size to A4 portrait (210mm x 297mm)
+        sections = doc.sections
+        for section in sections:
+            # A4 size: 210mm x 297mm
+            section.page_height = Mm(297)
+            section.page_width = Mm(210)
+            # Set margins (narrower margins for more content)
+            section.top_margin = Mm(20)
+            section.bottom_margin = Mm(20)
+            section.left_margin = Mm(20)
+            section.right_margin = Mm(20)
+
         # Set up document styles
         self._setup_styles(doc)
 
+        # Build header from name and title if available
+        header_data = {}
+        if optimized_content.get("name") or optimized_content.get("title"):
+            header_data = {
+                "name": optimized_content.get("name", ""),
+                "title": optimized_content.get("title", "")
+            }
+
         # Add sections
-        self._add_header_section(doc, optimized_content.get("header", {}))
+        if header_data:
+            self._add_header_section(doc, header_data)
         self._add_summary_section(doc, optimized_content.get("summary", ""))
         self._add_experience_section(doc, optimized_content.get("experience", ""))
         self._add_projects_section(doc, optimized_content.get("projects", ""))

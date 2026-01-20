@@ -26,8 +26,13 @@ class Adaptation(Base):
     changes_made = Column(JSON, nullable=True)  # List of changes made
     recommendations = Column(JSON, nullable=True)  # List of additional recommendations
 
+    # Language selection
+    language = Column(String, nullable=True)  # Language used for the CV (e.g., "English", "Spanish")
+    language_reason = Column(String, nullable=True)  # Explanation of why this language was chosen
+
     # GitHub projects included
     github_projects_included = Column(JSON, nullable=True)  # List of included projects
+    selected_github_projects = Column(JSON, nullable=True)  # Projects selected with reasons
 
     # Output files
     adapted_file_path = Column(String, nullable=True)

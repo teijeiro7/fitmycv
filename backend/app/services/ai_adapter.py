@@ -103,6 +103,11 @@ class AIAdapter:
     ) -> str:
         """Build the user prompt for CV adaptation"""
 
+        # Detect language from job description and location
+        is_english_job = self._is_english_job(job_description, job_location)
+        target_language = "English" if is_english_job else "Spanish"
+        language_code = "en" if is_english_job else "es"
+
         prompt_parts = [
             f"Please adapt the following resume for this job application:\n",
             f"\n## Target Position\n",
@@ -144,22 +149,47 @@ class AIAdapter:
 
         prompt_parts.extend([
             f"\n## Instructions\n",
-            "1. Analyze the job requirements and identify key skills and qualifications\n",
-            "2. Match the candidate's experience to these requirements\n",
-            "3. Adapt each section of the resume to better fit the position\n",
-            "4. Identify which GitHub projects (if any) should be highlighted\n",
-            "5. Calculate a match score (0-100) based on how well the candidate fits\n",
-            "6. Return your response as JSON with the following structure:\n",
+            f"1. Extract the candidate's NAME and PROFESSIONAL TITLE from the resume\n",
+            f"2. Analyze the job requirements and identify key skills and qualifications\n",
+            f"3. Match the candidate's experience to these requirements\n",
+            f"4. Adapt each section of the resume to better fit the position\n",
+            f"5. Identify which GitHub projects (if any) should be highlighted based on their relevance to the job\n",
+            f"6. Calculate a match score (0-100) based on how well the candidate fits\n",
+            f"7. IMPORTANT: Write the adapted CV in {target_language} because",
+            f"{' the job description is in English and/or the company location indicates English is preferred' if is_english_job else ' the job description is in Spanish and/or the company location indicates Spanish is preferred'}\n",
+            f"8. Return your response as JSON with the following structure:\n",
             json.dumps({
                 "match_score": "0-100 score",
+                "language": target_language,
+                "language_reason": f"Selected {target_language} because {'job is English-speaking' if is_english_job else 'job is Spanish-speaking'}",
                 "keywords_added": ["list", "of", "keywords", "emphasized"],
                 "keywords_missing": ["required", "keywords", "not", "in", "resume"],
-                "optimized_sections": {
-                    "summary": "Adapted professional summary",
-                    "experience": "Adapted experience section",
-                    "skills": "Adapted skills section",
-                    "education": "Adapted education section (if needed changes)",
-                    "projects": "Projects section including relevant GitHub projects"
+                "selected_github_projects": [
+                    {
+                        "name": "Project name",
+                        "reason": "Why this project was selected (e.g., 'Uses React which is required for the job')"
+                    }
+                ] if github_projects else [],
+                "optimized_content": {
+                    "name": "Candidate's full name extracted from resume",
+                    "title": "Professional title (e.g., 'Senior Software Engineer')",
+                    "summary": f"Adapted professional summary in {target_language} (2-3 sentences)",
+                    "experience": [
+                        {
+                            "title": "Job title",
+                            "company": "Company name",
+                            "date": "Date range (e.g., 'Jan 2020 - Present')",
+                            "achievements": ["Achievement 1", "Achievement 2", "Achievement 3"]
+                        }
+                    ],
+                    "skills": ["Skill1", "Skill2", "Skill3", "etc"],
+                    "education": [
+                        {
+                            "degree": "Degree name",
+                            "school": "School name",
+                            "year": "Graduation year"
+                        }
+                    ]
                 },
                 "changes_made": ["List", "of", "key", "changes", "made"],
                 "recommendations": ["List", "of", "additional", "recommendations"]
@@ -167,6 +197,42 @@ class AIAdapter:
         ])
 
         return "\n".join(prompt_parts)
+
+    def _is_english_job(self, job_description: str, job_location: Optional[str]) -> bool:
+        """Determine if the job is English-speaking based on description and location"""
+        job_desc_lower = job_description.lower()
+
+        # Check for Spanish keywords that indicate a Spanish job
+        spanish_keywords = ['buscamos', 'buscamos+', 'se busca', 'buscamos', 'buscamos talentos',
+                          'empleo', 'trabajo', 'vacante', 'salario', 'jornada', 'contrato',
+                          'incorporación', 'incorporar', 'candidate', 'candidatura',
+                          'empresa española', 'madrid', 'barcelona', 'valencia', 'sevilla',
+                          'bilbao', 'españa', 'spain']
+
+        # Check for English keywords that indicate an English job
+        english_keywords = ['we are looking', 'looking for', 'join our team', 'we are seeking',
+                          'engineering manager', 'software engineer', 'product manager',
+                          'data scientist', 'full stack', 'frontend', 'backend',
+                          'united states', 'usa', 'uk', 'united kingdom', 'london',
+                          'new york', 'san francisco', 'remote - us', 'remote us']
+
+        # Count Spanish keywords
+        spanish_count = sum(1 for keyword in spanish_keywords if keyword in job_desc_lower)
+
+        # If location is provided, check for Spanish locations
+        if job_location:
+            location_lower = job_location.lower()
+            if any(city in location_lower for city in ['madrid', 'barcelona', 'valencia', 'sevilla', 'bilbao', 'españa', 'spain']):
+                return False  # Spanish job
+            if any(city in location_lower for city in ['usa', 'uk', 'united states', 'london', 'united kingdom', 'new york', 'san francisco', 'remote us']):
+                return True  # English job
+
+        # If Spanish keywords dominate, it's a Spanish job
+        if spanish_count >= 3:
+            return False
+
+        # Default to English for tech jobs unless clearly Spanish
+        return True
 
     async def _call_ai(self, prompt: str, tone: str) -> Dict[str, Any]:
         """Call the AI API and return the parsed response"""

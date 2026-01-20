@@ -41,12 +41,22 @@ export default function LoginPage() {
     }
   }
 
-  const handleGoogleLogin = () => {
-    authService.loginWithGoogle()
+  const handleGoogleLogin = async () => {
+    try {
+      await authService.loginWithGoogle()
+    } catch (error) {
+      console.error('Google login error:', error)
+      toast.error('No se puede conectar con Google. Verifica que el servidor esté funcionando.')
+    }
   }
 
-  const handleGithubLogin = () => {
-    authService.loginWithGithub()
+  const handleGithubLogin = async () => {
+    try {
+      await authService.loginWithGithub()
+    } catch (error) {
+      console.error('GitHub login error:', error)
+      toast.error('No se puede conectar con GitHub. Verifica que el servidor esté funcionando.')
+    }
   }
 
   return (

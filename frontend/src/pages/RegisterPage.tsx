@@ -24,6 +24,24 @@ export default function RegisterPage() {
     }
   }
 
+  const handleGoogleLogin = async () => {
+    try {
+      await authService.loginWithGoogle()
+    } catch (error) {
+      console.error('Google login error:', error)
+      toast.error('No se puede conectar con Google. Verifica que el servidor esté funcionando.')
+    }
+  }
+
+  const handleGithubLogin = async () => {
+    try {
+      await authService.loginWithGithub()
+    } catch (error) {
+      console.error('GitHub login error:', error)
+      toast.error('No se puede conectar con GitHub. Verifica que el servidor esté funcionando.')
+    }
+  }
+
   return (
     <div className="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-[420px] bg-white dark:bg-[#1a232e] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 overflow-hidden">
@@ -139,14 +157,14 @@ export default function RegisterPage() {
           <div className="grid grid-cols-3 gap-3">
             <button
               type="button"
-              onClick={() => authService.loginWithGoogle()}
+              onClick={handleGoogleLogin}
               className="flex items-center justify-center gap-2 h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group"
             >
               <span className="text-slate-700 dark:text-white text-sm font-medium">Google</span>
             </button>
             <button
               type="button"
-              onClick={() => authService.loginWithGithub()}
+              onClick={handleGithubLogin}
               className="flex items-center justify-center gap-2 h-11 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group"
             >
               <span className="text-slate-700 dark:text-white text-sm font-medium">GitHub</span>

@@ -40,52 +40,53 @@ export default function PreviewPage() {
   if (!adaptation) return null
 
   return (
-    <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden h-screen flex flex-col max-w-md mx-auto shadow-2xl">
-      {/* Header */}
-      <header className="shrink-0 flex items-center justify-between px-4 py-3 bg-background-light dark:bg-background-dark z-20 border-b border-slate-200 dark:border-slate-800">
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300"
-        >
-          <span className="material-symbols-outlined text-2xl">chevron_left</span>
-        </button>
-        <h1 className="text-base font-bold text-slate-900 dark:text-white">Revisión de Adaptación</h1>
-        <button className="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-primary">
-          <span className="material-symbols-outlined text-[20px]">edit</span>
-        </button>
-      </header>
+    <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden w-full flex flex-col lg:flex-row lg:h-screen">
+      {/* Left Panel - AI Insights */}
+      <div className={`w-full lg:w-1/2 lg:max-w-2xl flex flex-col ${activeTab === 'preview' ? 'hidden lg:flex' : 'flex'}`}>
+        {/* Header */}
+        <header className="shrink-0 flex items-center justify-between px-4 py-3 bg-background-light dark:bg-background-dark z-20 border-b border-slate-200 dark:border-slate-800">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300"
+          >
+            <span className="material-symbols-outlined text-2xl">chevron_left</span>
+          </button>
+          <h1 className="text-base font-bold text-slate-900 dark:text-white">Revisión de Adaptación</h1>
+          <button className="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-primary">
+            <span className="material-symbols-outlined text-[20px]">edit</span>
+          </button>
+        </header>
 
-      {/* Tabs */}
-      <div className="shrink-0 px-4 pb-2 pt-2 bg-background-light dark:bg-background-dark z-20">
-        <div className="flex h-12 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800/80 p-1 relative">
-          <button
-            onClick={() => setActiveTab('insights')}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg text-sm font-semibold transition-all duration-300 ${
-              activeTab === 'insights'
-                ? 'bg-white dark:bg-slate-700 text-primary dark:text-white shadow-sm'
-                : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            <span className="material-symbols-outlined mr-2 text-[18px]">auto_awesome</span>
-            AI Insights
-          </button>
-          <button
-            onClick={() => setActiveTab('preview')}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg text-sm font-semibold transition-all duration-300 ${
-              activeTab === 'preview'
-                ? 'bg-white dark:bg-slate-700 text-primary dark:text-white shadow-sm'
-                : 'text-slate-500 dark:text-slate-400'
-            }`}
-          >
-            <span className="material-symbols-outlined mr-2 text-[18px]">description</span>
-            CV Preview
-          </button>
+        {/* Tabs - Only visible on mobile */}
+        <div className="shrink-0 px-4 pb-2 pt-2 bg-background-light dark:bg-background-dark z-20 lg:hidden">
+          <div className="flex h-12 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800/80 p-1 relative">
+            <button
+              onClick={() => setActiveTab('insights')}
+              className={`flex-1 flex items-center justify-center h-full rounded-lg text-sm font-semibold transition-all duration-300 ${
+                activeTab === 'insights'
+                  ? 'bg-white dark:bg-slate-700 text-primary dark:text-white shadow-sm'
+                  : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <span className="material-symbols-outlined mr-2 text-[18px]">auto_awesome</span>
+              AI Insights
+            </button>
+            <button
+              onClick={() => setActiveTab('preview')}
+              className={`flex-1 flex items-center justify-center h-full rounded-lg text-sm font-semibold transition-all duration-300 ${
+                activeTab === 'preview'
+                  ? 'bg-white dark:bg-slate-700 text-primary dark:text-white shadow-sm'
+                  : 'text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              <span className="material-symbols-outlined mr-2 text-[18px]">description</span>
+              CV Preview
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <main className="flex-1 overflow-y-auto overflow-x-hidden relative no-scrollbar pb-32">
-        {activeTab === 'insights' ? (
+        {/* Content - Insights */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden relative no-scrollbar pb-32 lg:pb-28">
           <div className="flex flex-col gap-5 px-5 pt-4 pb-8">
             {/* Match Score */}
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700/50">
@@ -113,12 +114,39 @@ export default function PreviewPage() {
               </p>
             </div>
 
-            {/* Keywords Added */}
+            {/* Optimizations Applied */}
             <div className="space-y-4">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-1">
                 Optimizaciones Aplicadas
               </h3>
 
+              {/* Language Selection */}
+              {adaptation.language && (
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <div className="flex items-start gap-3 mb-2">
+                    <div className="shrink-0 size-8 rounded-lg bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 dark:text-orange-400">
+                      <span className="material-symbols-outlined text-[20px]">translate</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Idioma Seleccionado</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Idioma del CV adaptado</p>
+                    </div>
+                  </div>
+                  <div className="pl-11">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-sm font-semibold">
+                      <span className="material-symbols-outlined text-[16px]">language</span>
+                      {adaptation.language === 'English' ? 'Inglés' : 'Español'}
+                    </span>
+                    {adaptation.language_reason && (
+                      <p className="mt-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {adaptation.language_reason}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Keywords Added */}
               <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                 <div className="flex items-start gap-3 mb-3">
                   <div className="shrink-0 size-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary">
@@ -130,41 +158,140 @@ export default function PreviewPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2 pl-11">
-                  {adaptation.keywords_added.map((keyword, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-600"
-                    >
-                      {keyword}
-                    </span>
-                  ))}
+                  {adaptation.keywords_added && Array.isArray(adaptation.keywords_added) && adaptation.keywords_added.length > 0 ? (
+                    adaptation.keywords_added.map((keyword, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-600"
+                      >
+                        {keyword}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-xs text-slate-500">No keywords added</p>
+                  )}
                 </div>
               </div>
 
+              {/* GitHub Projects Selected */}
+              {adaptation.selected_github_projects && Array.isArray(adaptation.selected_github_projects) && adaptation.selected_github_projects.length > 0 && (
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="shrink-0 size-8 rounded-lg bg-slate-800 dark:bg-slate-700 flex items-center justify-center text-white dark:text-white">
+                      <span className="material-symbols-outlined text-[20px]">code</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Proyectos de GitHub Seleccionados</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Proyectos que mejor encajan con la oferta</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 pl-11">
+                    {adaptation.selected_github_projects.map((project, idx) => (
+                      <div key={idx} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="material-symbols-outlined text-[16px] text-slate-600 dark:text-slate-400">folder_open</span>
+                          <span className="text-sm font-semibold text-slate-900 dark:text-white">{project.name}</span>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 pl-6">{project.reason}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Changes Made */}
+              {adaptation.changes_made && Array.isArray(adaptation.changes_made) && adaptation.changes_made.length > 0 && (
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="shrink-0 size-8 rounded-lg bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600 dark:text-green-400">
+                      <span className="material-symbols-outlined text-[20px]">checklist</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Cambios Realizados</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Modificaciones aplicadas al CV</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2 pl-11">
+                    {adaptation.changes_made.map((change, idx) => (
+                      <li key={idx} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[14px] text-green-500 shrink-0 mt-0.5">done</span>
+                        <span>{change}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Recommendations */}
+              {adaptation.recommendations && Array.isArray(adaptation.recommendations) && adaptation.recommendations.length > 0 && (
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="shrink-0 size-8 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 flex items-center justify-center text-yellow-600 dark:text-yellow-400">
+                      <span className="material-symbols-outlined text-[20px]">lightbulb</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Recomendaciones</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Sugerencias adicionales</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2 pl-11">
+                    {adaptation.recommendations.map((rec, idx) => (
+                      <li key={idx} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[14px] text-yellow-500 shrink-0 mt-0.5">tips_and_updates</span>
+                        <span>{rec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Skills Highlighted */}
               <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                 <div className="flex items-start gap-3 mb-3">
                   <div className="shrink-0 size-8 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
                     <span className="material-symbols-outlined text-[20px]">psychology</span>
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">Habilidades Enfatizadas</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Reordenadas por relevancia</p>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">Habilidades del Candidato</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Extraídas del CV original</p>
                   </div>
                 </div>
-                <ul className="pl-11 space-y-2">
-                  <li className="text-xs text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[14px] text-green-500">arrow_upward</span>
-                    Priorizado <strong>{adaptation.optimized_content.skills[0]}</strong> al inicio
-                  </li>
-                  <li className="text-xs text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[14px] text-green-500">arrow_upward</span>
-                    Destacado <strong>Liderazgo Cross-funcional</strong>
-                  </li>
-                </ul>
+                <div className="flex flex-wrap gap-2 pl-11">
+                  {adaptation.optimized_content?.skills && Array.isArray(adaptation.optimized_content.skills) && adaptation.optimized_content.skills.length > 0 ? (
+                    adaptation.optimized_content.skills.slice(0, 10).map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-1 rounded-md bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs font-medium border border-purple-200 dark:border-purple-700"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-xs text-slate-500">No skills found</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        ) : (
+        </main>
+      </div>
+
+      {/* Right Panel - CV Preview */}
+      <div className={`w-full lg:w-1/2 flex flex-col ${activeTab === 'insights' ? 'hidden lg:flex' : 'flex'} lg:border-l border-slate-200 dark:border-slate-800`}>
+        {/* Header for Preview */}
+        <div className="shrink-0 flex items-center justify-between px-4 py-3 bg-background-light dark:bg-background-dark z-20 border-b border-slate-200 dark:border-slate-800 lg:hidden">
+          <button
+            onClick={() => setActiveTab('insights')}
+            className="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300"
+          >
+            <span className="material-symbols-outlined text-2xl">chevron_left</span>
+          </button>
+          <h1 className="text-base font-bold text-slate-900 dark:text-white">CV Preview</h1>
+          <div className="size-10"></div>
+        </div>
+
+        {/* Content - Preview */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden relative no-scrollbar pb-32 lg:pb-28">
           <div className="flex flex-col gap-4 px-4 pt-2 pb-8 h-full">
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-2">
@@ -176,8 +303,8 @@ export default function PreviewPage() {
               </button>
             </div>
 
-            <div className="flex-1 bg-slate-200 dark:bg-slate-800 rounded-lg p-2 overflow-hidden relative shadow-inner flex items-start justify-center min-h-[400px]">
-              <div className="bg-white text-slate-900 p-6 shadow-xl mt-2 text-xs max-w-full scale-75">
+            <div className="flex-1 bg-slate-200 dark:bg-slate-800 rounded-lg p-2 overflow-hidden relative shadow-inner flex items-start justify-center min-h-[400px] lg:min-h-full">
+              <div className="bg-white text-slate-900 p-6 shadow-xl mt-2 text-xs max-w-full lg:scale-100 scale-75 origin-top-left lg:w-full">
                 <div className="border-b-2 border-slate-900 pb-3 mb-4">
                   <h1 className="text-2xl font-bold uppercase tracking-wider mb-1">{adaptation.optimized_content.name}</h1>
                   <p className="text-xs font-medium text-slate-600 tracking-widest uppercase">{adaptation.optimized_content.title}</p>
@@ -191,41 +318,53 @@ export default function PreviewPage() {
                 <div className="mt-4">
                   <h3 className="text-xs font-bold uppercase border-b border-slate-300 pb-1 mb-2">Habilidades</h3>
                   <div className="flex flex-wrap gap-1">
-                    {adaptation.optimized_content.skills.map((skill, idx) => (
-                      <span key={idx} className="text-[8px] bg-slate-100 px-1 py-0.5 rounded">
-                        {skill}
-                      </span>
-                    ))}
+                    {adaptation.optimized_content?.skills && Array.isArray(adaptation.optimized_content.skills) && adaptation.optimized_content.skills.length > 0 ? (
+                      adaptation.optimized_content.skills.map((skill, idx) => (
+                        <span key={idx} className="text-[8px] bg-slate-100 px-1 py-0.5 rounded">
+                          {skill}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-[8px] text-slate-500">No skills</p>
+                    )}
                   </div>
                 </div>
 
                 <div className="mt-4">
                   <h3 className="text-xs font-bold uppercase border-b border-slate-300 pb-1 mb-2">Experiencia</h3>
-                  {adaptation.optimized_content.experience.map((exp, idx) => (
-                    <div key={idx} className="mb-2">
-                      <div className="flex justify-between items-baseline mb-0.5">
-                        <h4 className="text-[10px] font-bold">{exp.title}</h4>
-                        <span className="text-[8px] text-slate-500">{exp.date}</span>
+                  {adaptation.optimized_content?.experience && Array.isArray(adaptation.optimized_content.experience) && adaptation.optimized_content.experience.length > 0 ? (
+                    adaptation.optimized_content.experience.map((exp, idx) => (
+                      <div key={idx} className="mb-2">
+                        <div className="flex justify-between items-baseline mb-0.5">
+                          <h4 className="text-[10px] font-bold">{exp.title}</h4>
+                          <span className="text-[8px] text-slate-500">{exp.date}</span>
+                        </div>
+                        <p className="text-[9px] italic text-slate-500 mb-1">{exp.company}</p>
+                        <ul className="list-disc list-inside text-[9px] text-slate-600 pl-1 space-y-0.5">
+                          {exp.achievements && Array.isArray(exp.achievements) && exp.achievements.length > 0 ? (
+                            exp.achievements.map((achievement, aidx) => (
+                              <li key={aidx}>{achievement}</li>
+                            ))
+                          ) : (
+                            <li className="text-[9px] text-slate-500">No achievements</li>
+                          )}
+                        </ul>
                       </div>
-                      <p className="text-[9px] italic text-slate-500 mb-1">{exp.company}</p>
-                      <ul className="list-disc list-inside text-[9px] text-slate-600 pl-1 space-y-0.5">
-                        {exp.achievements.map((achievement, aidx) => (
-                          <li key={aidx}>{achievement}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-[9px] text-slate-500">No experience</p>
+                  )}
                 </div>
               </div>
             </div>
             <p className="text-center text-xs text-slate-400 mt-2">Vista previa del CV adaptado</p>
           </div>
-        )}
-      </main>
+        </main>
+      </div>
 
       {/* Footer */}
-      <footer className="absolute bottom-0 w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 p-4 pb-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
-        <div className="flex gap-3">
+      <footer className="fixed bottom-0 left-0 right-0 lg:absolute w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 p-4 pb-6 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
+        <div className="flex gap-3 max-w-2xl mx-auto lg:max-w-none">
           <button className="flex-1 flex items-center justify-center h-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-slate-700 dark:text-slate-300 text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
             Editar Manual
           </button>

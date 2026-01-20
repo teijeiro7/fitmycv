@@ -23,6 +23,8 @@ export interface Resume {
 export interface Adaptation {
   id: number
   job_title: string
+  job_company?: string
+  job_location?: string
   match_score: number | null
   created_at: string
 }
@@ -45,6 +47,14 @@ export interface AdaptationDetail {
     skills: string[]
     education: any[]
   }
+  language?: string
+  language_reason?: string
+  selected_github_projects?: Array<{
+    name: string
+    reason: string
+  }>
+  changes_made?: string[]
+  recommendations?: string[]
   adapted_file_path: string
   pdf_file_path: string | null
 }

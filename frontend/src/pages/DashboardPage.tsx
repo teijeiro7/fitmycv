@@ -7,12 +7,37 @@ import toast from 'react-hot-toast'
 import Header from '@/components/LoginHeader'
 import BottomNav from '@/components/BottomNav'
 
+// Helper function to get company logo URL
+const getCompanyLogoUrl = (companyName: string): string => {
+  if (!companyName) return ''
+
+  // Extract domain from company name or use a common pattern
+  const cleanName = companyName.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim()
+    .replace(/\s+/g, '.')
+
+  // Try Clearbit logo API
+  return `https://logo.clearbit.com/${cleanName}.com`
+}
+
+// Helper to get company initial
+const getCompanyInitial = (companyName: string): string => {
+  if (!companyName) return '?'
+  const words = companyName.trim().split(/\s+/)
+  if (words.length >= 2) {
+    return (words[0][0] + words[1][0]).toUpperCase()
+  }
+  return companyName.substring(0, 2).toUpperCase()
+}
+
 export default function DashboardPage() {
   const { user } = useAuthStore()
   const navigate = useNavigate()
   const [adaptations, setAdaptations] = useState<Adaptation[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('home')
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     loadAdaptations()
@@ -27,6 +52,10 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleImageError = (id: number) => {
+    setImageErrors(prev => new Set(prev).add(id))
   }
 
   const getStatusBadge = (adaptation: Adaptation) => {
@@ -135,16 +164,38 @@ export default function DashboardPage() {
                   onClick={() => navigate(`/preview/${adaptation.id}`)}
                   className="group flex gap-4 rounded-xl bg-white dark:bg-slate-800 p-4 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all active:bg-slate-50 dark:active:bg-slate-700/50 text-left"
                 >
-                  <div className="bg-white dark:bg-slate-700 p-2 rounded-lg size-12 shrink-0 flex items-center justify-center border border-slate-100 dark:border-slate-600">
-                    <span className="material-symbols-outlined text-primary text-[32px]">
-                      description
-                    </span>
+                  {/* Company Logo / Initial */}
+                  <div className="shrink-0">
+                    {adaptation.job_company && !imageErrors.has(adaptation.id) ? (
+                      <div className="size-12 rounded-lg overflow-hidden bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 flex items-center justify-center">
+                        <img
+                          src={getCompanyLogoUrl(adaptation.job_company)}
+                          alt={`${adaptation.job_company} logo`}
+                          className="w-8 h-8 object-contain"
+                          onError={() => handleImageError(adaptation.id)}
+                        />
+                      </div>
+                    ) : (
+                      <div className="size-12 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-primary/30">
+                        {adaptation.job_company ? getCompanyInitial(adaptation.job_company) : 'CV'}
+                      </div>
+                    )}
                   </div>
-                  <div className="flex flex-col flex-1 gap-1">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-slate-900 dark:text-white text-base font-bold leading-tight line-clamp-1">
-                        {adaptation.job_title || 'Untitled Position'}
-                      </h3>
+
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 min-w-0 gap-1">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex flex-col min-w-0">
+                        <h3 className="text-slate-900 dark:text-white text-base font-bold leading-tight line-clamp-1">
+                          {adaptation.job_title || 'Untitled Position'}
+                        </h3>
+                        {adaptation.job_company && (
+                          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium truncate">
+                            {adaptation.job_company}
+                            {adaptation.job_location && ` • ${adaptation.job_location}`}
+                          </p>
+                        )}
+                      </div>
                       {getStatusBadge(adaptation)}
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
